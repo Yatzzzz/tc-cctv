@@ -254,6 +254,7 @@ Citizen.CreateThread(function()
 		end
 
 		if createdCamera ~= 0 then
+			Citizen.Wait(1)
 			exports['mythic_notify']:SendAlert('inform', 'Sağ ve Sol ok yönleri ile kameralar arası geçiş, numpad 4,6,2,8 tuşları ile kamerayı hareket ettirebilirsin ve backspace ile kamerlardan çıkış yapabilirsiniz', 2500)
 			break:
 
