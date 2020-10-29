@@ -1,4 +1,4 @@
----------------------------TEAMDEMO--------------------------
+---------------------------TEAMCODER--------------------------
 
 ESX = nil
 local PlayerData = {}
@@ -20,7 +20,7 @@ Citizen.CreateThread(function()
 	end
 
 	while ESX.GetPlayerData().job == nil do
-		Citizen.Wait(100)
+		Citizen.Wait(1)
 	end
 
 	PlayerData = ESX.GetPlayerData()
@@ -38,7 +38,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(21)
+		Citizen.Wait(20)
 
 		if IsControlJustReleased(0, 38) and CurrentAction == 'cameras' then
 			if not menuopen then
@@ -89,7 +89,7 @@ Citizen.CreateThread(function()
 							SetTimecycleModifierStrength(1.0)
 							local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 							while not HasScaleformMovieLoaded(scaleform) do
-								Citizen.Wait(900)
+								Citizen.Wait(0)
 							end
 						
 							PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -132,7 +132,7 @@ Citizen.CreateThread(function()
 							SetTimecycleModifierStrength(1.0)
 							local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 							while not HasScaleformMovieLoaded(scaleform) do
-								Citizen.Wait(900)
+								Citizen.Wait(0)
 							end
 						
 							PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -176,7 +176,7 @@ Citizen.CreateThread(function()
 							SetTimecycleModifierStrength(1.0)
 							local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 							while not HasScaleformMovieLoaded(scaleform) do
-								Citizen.Wait(900)
+								Citizen.Wait(0)
 							end
 						
 							PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -197,7 +197,7 @@ Citizen.CreateThread(function()
 						SetTimecycleModifierStrength(1.0)
 						local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 						while not HasScaleformMovieLoaded(scaleform) do
-							Citizen.Wait(900)
+							Citizen.Wait(0)
 						end
 		
 						PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -231,7 +231,7 @@ Citizen.CreateThread(function()
 						SetTimecycleModifierStrength(1.0)
 						local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 						while not HasScaleformMovieLoaded(scaleform) do
-							Citizen.Wait(900)
+							Citizen.Wait(0)
 						end
 					
 						PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -255,8 +255,10 @@ Citizen.CreateThread(function()
 
 		if createdCamera ~= 0 then
 			Citizen.Wait(1)
-			exports['mythic_notify']:SendAlert('inform', 'Sağ ve Sol ok yönleri ile kameralar arası geçiş, numpad 4,6,2,8 tuşları ile kamerayı hareket ettirebilirsin ve backspace ile kamerlardan çıkış yapabilirsiniz', 2500)
+			--local instructions = CreateInstuctionScaleform("instructional_buttons")
+			exports['mythic_notify']:SendAlert('inform', 'Sağ ve Sol ok yönleri ile kameralar arası geçiş backspace ile kamerlardan çıkış yapabilirsiniz', 2500)
 			break
+			
 
 			DrawScaleformMovieFullscreen(instructions, 255, 255, 255, 255, 0)
 			SetTimecycleModifier("scanline_cam_cheap")
@@ -578,6 +580,57 @@ function CloseSecurityCamera()
 	SetFocusEntity(GetPlayerPed(PlayerId()))
 end
 
+function CreateInstuctionScaleform(scaleform)
+	local scaleform = RequestScaleformMovie(scaleform)
+
+	while not HasScaleformMovieLoaded(scaleform) do
+		Citizen.Wait(10)
+	end
+
+	PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "SET_CLEAR_SPACE")
+	PushScaleformMovieFunctionParameterInt(200)
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+	PushScaleformMovieFunctionParameterInt(0)
+	PushScaleformMovieMethodParameterButtonName(GetControlInstructionalButton(0, 175, true))
+	InstructionButtonMessage(_U('next'))
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+	PushScaleformMovieFunctionParameterInt(1)
+	PushScaleformMovieMethodParameterButtonName(GetControlInstructionalButton(0, 174, true))
+	InstructionButtonMessage(_U('previous'))
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+	PushScaleformMovieFunctionParameterInt(2)
+	PushScaleformMovieMethodParameterButtonName(GetControlInstructionalButton(0, 177, true))
+	InstructionButtonMessage(_U('close'))
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+	PushScaleformMovieFunctionParameterInt(0)
+	PushScaleformMovieFunctionParameterInt(0)
+	PushScaleformMovieFunctionParameterInt(0)
+	PushScaleformMovieFunctionParameterInt(80)
+	PopScaleformMovieFunctionVoid()
+
+	return scaleform
+end
+
+function InstructionButtonMessage(text)
+	BeginTextCommandScaleformString("STRING")
+	AddTextComponentScaleform(text)
+	EndTextCommandScaleformString()
+end
+
 RegisterNetEvent('esx_securitycam:freeze')
 AddEventHandler('esx_securitycam:freeze', function(freeze)
 	FreezeEntityPosition(PlayerPedId(), freeze)
@@ -585,7 +638,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1500)
+		Citizen.Wait(10)
 		if blockbuttons then
 			DisableControlAction(2, 24, true)
 			DisableControlAction(2, 257, true)
@@ -603,12 +656,16 @@ Citizen.CreateThread(function()
 			DisableControlAction(2, 168, true)
 			DisableControlAction(2, 57, true)
 		else
-			Citizen.Wait(2500)
+			Citizen.Wait(1000)
 		end
 	end
 end)
 
 RegisterCommand("cctv", function(source, args, rawCommand)
+	local PlayerData = ESX.GetPlayerData(source)
+
+	if PlayerData.job and PlayerData.job.name == 'police' or PlayerData.job and PlayerData.job.name == 'sheriff' then
+
 		if not menuopen then
 		local dict = "amb@world_human_seat_wall_tablet@female@base"
         RequestAnimDict(dict)
@@ -658,7 +715,7 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 					SetTimecycleModifierStrength(1.0)
 					local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 					while not HasScaleformMovieLoaded(scaleform) do
-						Citizen.Wait(900)
+						Citizen.Wait(0)
 					end
 					PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
 					SetFocusArea(x, y, z, 0.0, 0.0, 0.0)
@@ -698,7 +755,7 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 					SetTimecycleModifierStrength(1.0)
 					local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 					while not HasScaleformMovieLoaded(scaleform) do
-						Citizen.Wait(900)
+						Citizen.Wait(0)
 					end
 				
 					PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -741,7 +798,7 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 					SetTimecycleModifierStrength(1.0)
 					local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 					while not HasScaleformMovieLoaded(scaleform) do
-						Citizen.Wait(900)
+						Citizen.Wait(0)
 					end
 				
 					PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -761,7 +818,7 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 				SetTimecycleModifierStrength(1.0)
 				local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 				while not HasScaleformMovieLoaded(scaleform) do
-					Citizen.Wait(900)
+					Citizen.Wait(0)
 				end
 
 				PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -795,7 +852,7 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 				SetTimecycleModifierStrength(1.0)
 				local scaleform = RequestScaleformMovie("TRAFFIC_CAM")
 				while not HasScaleformMovieLoaded(scaleform) do
-					Citizen.Wait(900)
+					Citizen.Wait(0)
 				end
 			
 				PushScaleformMovieFunction(scaleform, "PLAY_CAM_MOVIE")
@@ -813,8 +870,9 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 			menu.close()
 			menuopen = false
 		end)
-   
+	end
 	end
 end)
 
----------------------------TEAMDEMO--------------------------
+---------------------------TEAMCODER--------------------------
+
