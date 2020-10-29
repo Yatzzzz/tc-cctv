@@ -2,7 +2,7 @@ fx_version 'adamant'
 
 game 'gta5'
 
-description 'td-cctv'
+description 'tc-cctv'
 
 author 'Yatzzz#8995'
 
