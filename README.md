@@ -8,4 +8,4 @@ TeamCoder
 
 1. CD in your resources/[esx] folder
 
-2. Add this in your server.cfg : start td-cctv
+2. Add this in your server.cfg : start tc-cctv
