@@ -256,8 +256,7 @@ Citizen.CreateThread(function()
 		if createdCamera ~= 0 then
 			Citizen.Wait(1)
 			--local instructions = CreateInstuctionScaleform("instructional_buttons")
-			exports['mythic_notify']:SendAlert('inform', 'Sağ ve Sol ok yönleri ile kameralar arası geçiş backspace ile kamerlardan çıkış yapabilirsiniz', 2500)
-			break
+			
 			
 
 			DrawScaleformMovieFullscreen(instructions, 255, 255, 255, 255, 0)
@@ -582,7 +581,6 @@ end
 
 function CreateInstuctionScaleform(scaleform)
 	local scaleform = RequestScaleformMovie(scaleform)
-
 	while not HasScaleformMovieLoaded(scaleform) do
 		Citizen.Wait(10)
 	end
@@ -663,9 +661,8 @@ end)
 
 RegisterCommand("cctv", function(source, args, rawCommand)
 	local PlayerData = ESX.GetPlayerData(source)
-
+	exports['mythic_notify']:SendAlert('inform', 'Sağ ve Sol ok yönleri ile kameralar arası geçiş backspace ile kamerlardan çıkış yapabilirsiniz', 2500)
 	if PlayerData.job and PlayerData.job.name == 'police' or PlayerData.job and PlayerData.job.name == 'sheriff' then
-
 		if not menuopen then
 		local dict = "amb@world_human_seat_wall_tablet@female@base"
         RequestAnimDict(dict)
@@ -875,4 +872,5 @@ RegisterCommand("cctv", function(source, args, rawCommand)
 end)
 
 ---------------------------TEAMCODER--------------------------
+
 
