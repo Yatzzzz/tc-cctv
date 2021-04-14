@@ -1,5 +1,4 @@
-# tc-cctv
-TeamCoder
+# yatzzz-cctv
 
 
 /cctv command
@@ -8,4 +7,4 @@ TeamCoder
 
 1. CD in your resources/[esx] folder
 
-2. Add this in your server.cfg : start tc-cctv
+2. Add this in your server.cfg : start yatzzz-cctv
